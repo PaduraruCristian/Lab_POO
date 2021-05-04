@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-laptop::laptop(const std::string& n, const std::string& desc, const int& nr, const double& p, const double &r): electronic(n, desc, nr, p), rate(r)
+laptop::laptop(const std::string& n, const std::string& desc, const double p, const double r): electronic(n, desc, p), rate(r)
 {
     if(rate<0)
         throw std::invalid_argument("Not a worthwhile product\n");
@@ -13,19 +13,6 @@ laptop::~laptop()
     std::cout<<"Laptop destructor for "<<this->name<<" \n";
 }
 
-double laptop::sell(const int& nr)
-{
-    if(nr > this->in_stock)
-        throw std::invalid_argument("Don't have enough " + this->name + " laptops in stock.\n");
-
-    this->in_stock-=nr;
-    return (double) nr * this->price;
-}
-
-void laptop::supply(const int& nr)
-{
-    this->in_stock += nr;
-}
 
 void laptop::present_product()
 {
@@ -33,11 +20,11 @@ void laptop::present_product()
     std::cout<<"Tip: can mine coins at a rate of "<<this->rate<<" per hour.\n";
 }
 
-double laptop::gen_bonus_income(const int& nr_hours)
+double laptop::gen_bonus_income(const int nr_hours)
 {
     if(nr_hours<0)
         throw std::invalid_argument("Negative time? Trying to bend physics are we???\n");
-    std::cout<<"Mined coins for "<<nr_hours<<" hours with "<<this->in_stock <<" "<<this->name<<" laptops.\n";
-    return this->rate * nr_hours * this->in_stock;
+    std::cout<<"Mined coins for "<<nr_hours<<" hours with "<<this->name<<" laptops.\n";
+    return this->rate * nr_hours;
 }
 

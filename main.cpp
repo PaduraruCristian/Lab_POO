@@ -10,7 +10,7 @@
 
 int main()
 {
-
+    /*
     std::vector < std::unique_ptr <electronic>> v;
     std::vector < std::pair <int, int> > order;
     try{
@@ -49,6 +49,6 @@ int main()
     catch(std::invalid_argument& er)
     {
         std::cout<<er.what();
-    }
+    }*/
     return 0;
 }

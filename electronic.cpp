@@ -1,9 +1,9 @@
 #include "electronic.h"
 
-electronic::electronic(const std::string& n, const std::string& desc, const int& nr, const double& p) : name(n), specs(desc), in_stock(nr), price(p)
+electronic::electronic(const std::string& n, const std::string& desc, const double p) : name(n), specs(desc), producer_price(p)
 {
-    if(in_stock<0 || price<0)
-        throw std::invalid_argument("Negative values rejected\n");
+    if(producer_price<0)
+        throw std::invalid_argument("Negative price for " + name +".\nWho would pay to sell their products??" );
     if( name.length() == 0)
-        throw std::invalid_argument("Empty string as name rejected\n");
+        throw std::invalid_argument("Empty string as name.\n");
 }
