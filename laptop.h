@@ -12,10 +12,10 @@ public:
     laptop(const std::string& n, const std::string& desc, const int& nr, const double& p, const double &r);
     ~laptop();
 
-    double sell(const int& nr) override;
-    void supply(const int& nr) override;
+    double sell(const int nr) override;
+    void supply(const int nr) override;
     void present_product() override;
-    double gen_bonus_income(const int& nr_hours) override;
+    double gen_bonus_income(const int nr_hours) override;
 };
 
 #endif // LAPTOP_H

@@ -13,16 +13,16 @@ laptop::~laptop()
     std::cout<<"Laptop destructor for "<<this->name<<" \n";
 }
 
-double laptop::sell(const int& nr)
+double laptop::sell(const int nr)
 {
     if(nr > this->in_stock)
         throw std::invalid_argument("Don't have enough " + this->name + " laptops in stock.\n");
 
     this->in_stock-=nr;
-    return (double) nr * this->price;
+    return (double) nr * this->producer_price;
 }
 
-void laptop::supply(const int& nr)
+void laptop::supply(const int nr)
 {
     this->in_stock += nr;
 }
@@ -33,7 +33,7 @@ void laptop::present_product()
     std::cout<<"Tip: can mine coins at a rate of "<<this->rate<<" per hour.\n";
 }
 
-double laptop::gen_bonus_income(const int& nr_hours)
+double laptop::gen_bonus_income(const int nr_hours)
 {
     if(nr_hours<0)
         throw std::invalid_argument("Negative time? Trying to bend physics are we???\n");
