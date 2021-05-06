@@ -1,5 +1,5 @@
 #include "smart_phone.h"
-#include <iostream>
+
 
 smart_phone::smart_phone(const std::string& n, const std::string& desc, const double p, int tre):electronic(n, desc, p), threshold(tre)
 {
@@ -12,9 +12,9 @@ smart_phone::~smart_phone()
 }
 
 
-void smart_phone::present_product()
+void smart_phone::present_product(std::ostream& c)
 {
-    std::cout<<this->name<<'\n'<<this->specs<<"\n";
+    c<<this->name<<'\n'<<this->specs<<"\n";
 }
 
 double smart_phone::gen_bonus_income(const int nr_hours)

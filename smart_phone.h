@@ -12,7 +12,7 @@ public:
     smart_phone(const std::string& n, const std::string& desc, const double p, int tre=0);
     virtual ~smart_phone();
 
-    void present_product() override;
+    void present_product(std::ostream& c) override;
     double gen_bonus_income(const int nr_hours) override;
 
 };

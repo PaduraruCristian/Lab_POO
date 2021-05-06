@@ -1,5 +1,5 @@
 #include "laptop.h"
-#include <iostream>
+
 
 laptop::laptop(const std::string& n, const std::string& desc, const double p, const double r): electronic(n, desc, p), rate(r)
 {
@@ -13,10 +13,10 @@ laptop::~laptop()
 }
 
 
-void laptop::present_product()
+void laptop::present_product(std::ostream& c)
 {
-    std::cout<<this->name<<'\n'<<this->specs<<"\n";
-    std::cout<<"Tip: can mine coins at a rate of "<<this->rate<<" per hour.\n";
+    c<<this->name<<'\n'<<this->specs<<"\n";
+    c<<"Tip: can mine coins at a rate of "<<this->rate<<" per hour.\n";
 }
 
 double laptop::gen_bonus_income(const int nr_hours)

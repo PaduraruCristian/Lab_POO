@@ -12,7 +12,7 @@ public:
     laptop(const std::string& n, const std::string& desc,  const double p, const double r);
     ~laptop();
 
-    void present_product() override;
+    void present_product(std::ostream& c) override;
     double gen_bonus_income(const int nr_hours) override;
 };
 

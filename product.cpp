@@ -9,6 +9,10 @@ product::product(const product& pr): price(pr.price), nr(pr.nr), el(pr.el)
 {
 
 }
+product::product(): price(0), nr(0), el(nullptr)
+{
+
+}
 
 product::~product()
 {

@@ -7,3 +7,14 @@ electronic::electronic(const std::string& n, const std::string& desc, const doub
     if( name.length() == 0)
         throw std::invalid_argument("Empty string as name.\n");
 }
+
+
+double electronic::get_pprice()
+{
+    return this->producer_price;
+}
+
+const std::string& electronic::get_name()
+{
+    return this->name;
+}

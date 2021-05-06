@@ -3,7 +3,7 @@
 
 #include <string>
 #include <stdexcept>
-
+#include <iostream>
 class electronic
 {
 protected:
@@ -15,8 +15,12 @@ public:
     electronic(const std::string& n, const std::string& desc, const double p);
     virtual ~electronic() = default;
 
-    virtual void present_product()=0;
+    double get_pprice();
+    const std::string& get_name();
+
+    virtual void present_product(std::ostream& c)=0;
     virtual double gen_bonus_income(const int nr_hours)=0;
+
 };
 
 #endif // ELECTRONIC_H

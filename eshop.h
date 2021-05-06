@@ -5,18 +5,23 @@
 #include "product.h"
 class eshop
 {
-protected:
     std::string name, address;
     std::vector <product> products;
+    ///0<=tax<=1
+    ///product.price = producer_price * (1+tax)
+    double tax;
 
 public:
-    eshop(std::string& n, std::string& ad);
+    eshop(const std::string& n, const std::string& ad, const double t);
     ~eshop();
 
-    void add_product(const std::shared_ptr<electronic> &e, const int pr, const int n);
+    void add_product(const std::shared_ptr<electronic> &e, const int n);
     void remove_product(int index);
     void sell(int index, int nr_prod);
-    void supply();
+    void supply(int index, int nr_prod);
+
+    void list_products(std::ostream& c);
+    void see_details(std::ostream& c, const int index);
 };
 
 #endif // ESHOP_H

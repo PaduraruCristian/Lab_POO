@@ -11,6 +11,7 @@ class product
 public:
     product(const std::shared_ptr<electronic> &e, const double pr, const int n);
     product(const product& pr);
+    product();
     ~product();
 
     product& operator=(const product& pr);
@@ -19,6 +20,7 @@ public:
     double get_price();
     int get_nr();
     std::shared_ptr<electronic>& get_el();
+
     void update_nr(int x);
     void update_price(double x);
 };
