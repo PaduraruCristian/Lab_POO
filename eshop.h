@@ -22,6 +22,9 @@ public:
 
     void list_products(std::ostream& c);
     void see_details(std::ostream& c, const int index);
+
+    const std::string& get_name();
+    const int get_nrprods();
 };
 
 #endif // ESHOP_H

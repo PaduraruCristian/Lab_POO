@@ -2,12 +2,12 @@
 
 eshop::eshop(const std::string& n, const std::string& ad, const double t):name(n), address(ad), tax(t)
 {
-    //ctor
+    //products.clear();
 }
 
 eshop::~eshop()
 {
-    //dtor
+
 }
 
 void eshop::add_product(const std::shared_ptr<electronic> &e, const int n)
@@ -72,5 +72,12 @@ void eshop::see_details(std::ostream& c, const int index)
         throw std::invalid_argument("Index out of range. see_details() called with index=" + std::to_string(index) + ".\n");
 }
 
+const std::string& eshop::get_name()
+{
+    return this->name;
+}
 
-
+const int eshop::get_nrprods()
+{
+    return this->products.size();
+}
