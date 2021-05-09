@@ -81,3 +81,13 @@ const int eshop::get_nrprods()
 {
     return this->products.size();
 }
+
+double eshop::get_price(const int index)
+{
+    return this->products[index].get_price();
+}
+
+int eshop::get_nr_items(const int index)
+{
+    return this->products[index].get_nr();
+}

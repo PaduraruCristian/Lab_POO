@@ -25,6 +25,8 @@ public:
 
     const std::string& get_name();
     const int get_nrprods();
+    double get_price(const int index);
+    int get_nr_items(const int index);
 };
 
 #endif // ESHOP_H

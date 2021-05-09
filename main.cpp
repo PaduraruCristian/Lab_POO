@@ -81,37 +81,72 @@ int main()
     catch(std::invalid_argument& s)
     {
         std::cout<<s.what();
+        return 0;
     }
-    int nr_shop=0, nr_prod=0, amount;
+    int nr_shop=0, nr_prod=0, amount, option;
     while(true)
     {
-
-        //std::system("cls");
-        std::cout<<"===========================================\n";
-        for(int i=0;i<shops.size();++i)
+        if(!nr_shop)
         {
-            std::cout<<i+1<<"."<<shops[i].get_name()<<'\n';
+            std::system("cls");
+            std::cout<<"===========================================\n";
+            for(int i=0;i<shops.size();++i)
+            {
+                std::cout<<i+1<<"."<<shops[i].get_name()<<'\n';
+            }
+            std::cout<<"===========================================\n";
+            std::cout<<"Choose a shop (giving an out of range index will close the program):";
+            std::cin>>nr_shop;
         }
-        std::cout<<"===========================================\n";
-        std::cout<<"Choose a shop (giving an out of range index will close the program):";
-        std::cin>>nr_shop;
+
         std::system("cls");
         if(1<=nr_shop && nr_shop<=shops.size())
         {
-            shops[nr_shop-1].list_products(std::cout);
-            std::cout<<"Choose a product to see more details or buy:";
-            std::cin>>nr_prod;
+            if(!nr_prod)
+            {
+                shops[nr_shop-1].list_products(std::cout);
+                std::cout<<shops[nr_shop-1].get_nrprods()+1<<". Back\n";
+                std::cout<<"Choose a product to see more details or buy:";
+                std::cin>>nr_prod;
+            }
+
             if(1<=nr_prod && nr_prod<=shops[nr_shop-1].get_nrprods())
             {
                 std::system("cls");
                 shops[nr_shop-1].see_details(std::cout, nr_prod-1);
-                std::cin>>amount;
-                return 0;
+                std::cout<<"======================================\n";
+                std::cout<<"Your balance:"<<balance<<'\n';
+                std::cout<<"1. Buy\n";
+                std::cout<<"2. Back\n";
+                std::cin>>option;
+
+                if(option==1)
+                {
+                    std::cout<<"Amount:";
+                    std::cin>>amount;
+                    if(amount>0 && amount<=shops[nr_shop-1].get_nr_items(nr_prod-1)   && amount * shops[nr_shop-1].get_price(nr_prod-1) <= balance)
+                    {
+                        balance -=  amount * shops[nr_shop-1].get_price(nr_prod-1);
+                        shops[nr_shop-1].sell(nr_prod-1, amount);
+                    }
+                }
+                else if(option==2)
+                {
+                    nr_prod=0;
+                }
+
+
+
+            }
+            else if(nr_prod == shops[nr_shop-1].get_nrprods() + 1)
+            {
+                nr_prod=0;
+                nr_shop=0;
             }
         }
         else
         {
-            std::cout<<"Out of range index: process terminated;\n";
+
             return 0;
         }
     }
