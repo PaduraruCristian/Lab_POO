@@ -21,7 +21,6 @@ void init()
     std::ifstream f("set_up.in");
     ///user's initial balance
     f>>balance;
-
     std::string name, specs;
     double producer_price, r;
     int tre;
