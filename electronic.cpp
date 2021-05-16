@@ -1,6 +1,8 @@
 #include "electronic.h"
 
-electronic::electronic(const std::string& n, const std::string& desc, const double p) : name(n), specs(desc), producer_price(p)
+#include <utility>
+
+electronic::electronic(std::string  nume, std::string  desc, double pret) : name(std::move(nume)), specs(std::move(desc)), producer_price(pret)
 {
     if(producer_price<0)
         throw std::invalid_argument("Negative price for " + name +".\nWho would pay to sell their products??" );
@@ -9,7 +11,7 @@ electronic::electronic(const std::string& n, const std::string& desc, const doub
 }
 
 
-double electronic::get_pprice()
+double electronic::get_producer_price() const
 {
     return this->producer_price;
 }

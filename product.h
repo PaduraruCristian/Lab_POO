@@ -9,7 +9,7 @@ class product
     int nr;
     std::shared_ptr<electronic> el;
 public:
-    product(const std::shared_ptr<electronic> &e, const double pr, const int n);
+    product(std::shared_ptr<electronic> elec, double price, int nr);
     product(const product& pr);
     product();
     ~product();
@@ -17,12 +17,12 @@ public:
     product& operator=(const product& pr);
     friend std::ostream& operator<<(std::ostream &c, const product& pr);
 
-    double get_price();
-    int get_nr();
-    std::shared_ptr<electronic>& get_el();
+    double get_price() const;
+    int get_nr() const;
+    const std::shared_ptr<electronic>& get_el();
 
-    void update_nr(int x);
-    void update_price(double x);
+    void update_nr(int new_nr);
+    void update_price(double new_price);
 };
 
 #endif // PRODUCT_H

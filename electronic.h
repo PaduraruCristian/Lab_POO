@@ -12,14 +12,14 @@ protected:
     double producer_price;
 
 public:
-    electronic(const std::string& n, const std::string& desc, const double p);
+    electronic(std::string  nume, std::string  desc, double pret);
     virtual ~electronic() = default;
 
-    double get_pprice();
+    double get_producer_price() const;
     const std::string& get_name();
 
     virtual void present_product(std::ostream& c)=0;
-    virtual double gen_bonus_income(const int nr_hours)=0;
+    virtual double gen_bonus_income(int nr_hours)=0;
 
 };
 

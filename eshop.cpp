@@ -1,18 +1,18 @@
 #include "eshop.h"
 
-eshop::eshop(const std::string& n, const std::string& ad, const double t):name(n), address(ad), tax(t)
+
+eshop::eshop(std::string  nume, std::string  adresa, const double taxa):name(std::move(nume)), address(std::move(adresa)), tax(taxa)
 {
     //products.clear();
+    if(tax <0)
+        throw std::invalid_argument("Is this some charity or a real business!?\n");
 }
 
-eshop::~eshop()
-{
-
-}
+eshop::~eshop()= default;
 
 void eshop::add_product(const std::shared_ptr<electronic> &e, const int n)
 {
-    products.emplace_back(e, e->get_pprice() * (1+tax), n);
+    products.emplace_back(e, e->get_producer_price() * (1 + tax), n);
 }
 
 void eshop::remove_product(int index)
@@ -27,30 +27,22 @@ void eshop::remove_product(int index)
 
 void eshop::sell(int index, int nr_prod)
 {
-    if(index<products.size())
+    auto nr = products.at(index).get_nr();
+    if(nr)
     {
-        if(products[index].get_nr())
+        if(nr>=nr_prod)
         {
-            if(products[index].get_nr()>=nr_prod)
-            {
-                products[index].update_nr(products[index].get_nr() - nr_prod);
-                return;
-            }
-            throw std::invalid_argument("Don't have enough products with index " + std::to_string(index) + " in stock.\n");
+            products.at(index).update_nr(nr - nr_prod);
+            return;
         }
-        throw std::invalid_argument("Product index " + std::to_string(index) + " is out of stock.\n");
+        throw std::invalid_argument("Don't have enough products with index " + std::to_string(index) + " in stock.\n");
     }
-    throw std::invalid_argument("Index out of range. sell() called with index=" + std::to_string(index) + ".\n");
+    throw std::invalid_argument("Product index " + std::to_string(index) + " is out of stock.\n");
 }
 
 void eshop::supply(int index, int nr_prod)
 {
-    if(index<products.size())
-    {
-        products[index].update_nr(products[index].get_nr() + nr_prod);
-        return;
-    }
-    throw std::invalid_argument("Index out of range. supply() called with index=" + std::to_string(index) + ".\n");
+    products.at(index).update_nr(products.at(index).get_nr() + nr_prod);
 }
 
 void eshop::list_products(std::ostream& c)
@@ -66,10 +58,7 @@ void eshop::list_products(std::ostream& c)
 
 void eshop::see_details(std::ostream& c, const int index)
 {
-    if(index<products.size())
-        c<<products[index];
-    else
-        throw std::invalid_argument("Index out of range. see_details() called with index=" + std::to_string(index) + ".\n");
+    c<<products.at(index);
 }
 
 const std::string& eshop::get_name()
@@ -77,17 +66,21 @@ const std::string& eshop::get_name()
     return this->name;
 }
 
-const int eshop::get_nrprods()
+int eshop::get_nrprods()
 {
-    return this->products.size();
+    return (int) this->products.size();
 }
 
 double eshop::get_price(const int index)
 {
-    return this->products[index].get_price();
+    return this->products.at(index).get_price();
 }
 
 int eshop::get_nr_items(const int index)
 {
-    return this->products[index].get_nr();
+    return this->products.at(index).get_nr();
+}
+
+const std::shared_ptr<electronic> &eshop::get_elec(int index) {
+    return products.at(index).get_el();
 }

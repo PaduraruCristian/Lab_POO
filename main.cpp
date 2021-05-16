@@ -3,24 +3,27 @@
 #include <string>
 #include <fstream>
 #include <memory>
-#include <cstdlib>
 
 #include "eshop.h"
 #include "laptop.h"
 #include "smart_phone.h"
+#include "rlutil.h"  /// nice license details :)))
+#include "User_s.h"
+
 
 /// Un vector in care am pointeri la toate electronicele de pe piata
 /// In eshop, fiecare produs are o copie a unui astfel de pointer -> shared_ptr > unique_ptr;
 std::vector<std::shared_ptr<electronic>> all_electronics;
 std::vector<eshop> shops;
 
-double balance;
 
-void init()
+void init(User_s* &user)
 {
     std::ifstream f("set_up.in");
     ///user's initial balance
+    double balance;
     f>>balance;
+    user->set_balance(balance);
     std::string name, specs;
     double producer_price, r;
     int tre;
@@ -71,84 +74,96 @@ void init()
     }
 }
 
+void menu(User_s* &user){
+    int nr_shop=0, nr_prod=0, amount, option;
+    while(true) {
+        auto my_elec = shops.size() +1;
+        auto exit_opt = shops.size() + 2;
+        if (!nr_shop) {
+            rlutil::cls();
+            std::cout << "===========================================\n";
+            for (int i = 0; i < shops.size(); ++i) {
+                std::cout << i + 1 << "." << shops[i].get_name() << '\n';
+            }
+            std::cout << "===========================================\n";
+            std::cout << my_elec<< ". My electronics\n";
+            std::cout << exit_opt << ". Exit\n";
+            std::cin >> nr_shop;
+        }
+
+        rlutil::cls();
+        if(nr_shop == my_elec){
+            user->print_owned_elecs(std::cout);
+            std::cout<<"1. Back\n";
+            std::cin>>nr_shop;
+            nr_shop=0;
+            continue;
+        }
+
+        if (nr_shop == exit_opt) break;
+        
+        auto &eshop = shops.at(nr_shop - 1);
+
+        auto back_opt = eshop.get_nrprods() + 1;
+        if (!nr_prod) {
+            eshop.list_products(std::cout);
+            std::cout << back_opt << ". Back\n";
+            std::cout << "Choose a product to see more details or buy:";
+            std::cin >> nr_prod;
+        }
+
+        if (nr_prod == back_opt) {
+            nr_prod = 0;
+            nr_shop = 0;
+        }
+        else {
+            rlutil::cls();
+
+            eshop.see_details(std::cout, nr_prod - 1);
+            std::cout << "======================================\n";
+            std::cout << "Your balance:" << user->get_balance() << '\n';
+            std::cout << "1. Buy\n";
+            std::cout << "2. Back\n";
+            std::cin >> option;
+
+            if (option == 1) {
+                std::cout << "Amount:";
+                std::cin >> amount;
+                if (amount > 0 && amount <= eshop.get_nr_items(nr_prod - 1) &&
+                    amount * eshop.get_price(nr_prod - 1) <= user->get_balance()) {
+                    user->set_balance(user->get_balance() - amount * eshop.get_price(nr_prod - 1));
+                    user->add_product(eshop.get_elec(nr_prod - 1), amount);
+                    eshop.sell(nr_prod - 1, amount);
+                }
+            } else if (option == 2) {
+                nr_prod = 0;
+            }
+            else throw std::out_of_range("Not a valid option");
+        }
+    }
+}
+
 
 int main()
 {
+    auto user = User_s::get_user();
     try{
-        init();
+        init(user);
+        menu(user);
     }
     catch(std::invalid_argument& s)
     {
         std::cout<<s.what();
         return 0;
     }
-    int nr_shop=0, nr_prod=0, amount, option;
-    while(true)
+    catch(std::out_of_range& s)
     {
-        if(!nr_shop)
-        {
-            std::system("cls");
-            std::cout<<"===========================================\n";
-            for(int i=0;i<shops.size();++i)
-            {
-                std::cout<<i+1<<"."<<shops[i].get_name()<<'\n';
-            }
-            std::cout<<"===========================================\n";
-            std::cout<<"Choose a shop (giving an out of range index will close the program):";
-            std::cin>>nr_shop;
-        }
-
-        std::system("cls");
-        if(1<=nr_shop && nr_shop<=shops.size())
-        {
-            if(!nr_prod)
-            {
-                shops[nr_shop-1].list_products(std::cout);
-                std::cout<<shops[nr_shop-1].get_nrprods()+1<<". Back\n";
-                std::cout<<"Choose a product to see more details or buy:";
-                std::cin>>nr_prod;
-            }
-
-            if(1<=nr_prod && nr_prod<=shops[nr_shop-1].get_nrprods())
-            {
-                std::system("cls");
-                shops[nr_shop-1].see_details(std::cout, nr_prod-1);
-                std::cout<<"======================================\n";
-                std::cout<<"Your balance:"<<balance<<'\n';
-                std::cout<<"1. Buy\n";
-                std::cout<<"2. Back\n";
-                std::cin>>option;
-
-                if(option==1)
-                {
-                    std::cout<<"Amount:";
-                    std::cin>>amount;
-                    if(amount>0 && amount<=shops[nr_shop-1].get_nr_items(nr_prod-1)   && amount * shops[nr_shop-1].get_price(nr_prod-1) <= balance)
-                    {
-                        balance -=  amount * shops[nr_shop-1].get_price(nr_prod-1);
-                        shops[nr_shop-1].sell(nr_prod-1, amount);
-                    }
-                }
-                else if(option==2)
-                {
-                    nr_prod=0;
-                }
-
-
-
-            }
-            else if(nr_prod == shops[nr_shop-1].get_nrprods() + 1)
-            {
-                nr_prod=0;
-                nr_shop=0;
-            }
-        }
-        else
-        {
-
-            return 0;
-        }
+        std::cout<<"Index out of range\n"<<s.what()<<'\n';
+    }
+    catch (...) {
+        std::cout<<"I have no f**ing idea what you managed to mess up...\n";
     }
 
+    delete user;
     return 0;
 }

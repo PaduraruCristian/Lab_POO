@@ -12,21 +12,24 @@ class eshop
     double tax;
 
 public:
-    eshop(const std::string& n, const std::string& ad, const double t);
+    eshop(std::string  nume, std::string  adresa, double taxa);
     ~eshop();
 
-    void add_product(const std::shared_ptr<electronic> &e, const int n);
+    void add_product(const std::shared_ptr<electronic> &e, int n);
     void remove_product(int index);
+
     void sell(int index, int nr_prod);
     void supply(int index, int nr_prod);
 
     void list_products(std::ostream& c);
-    void see_details(std::ostream& c, const int index);
+
+    void see_details(std::ostream& c, int index);
 
     const std::string& get_name();
-    const int get_nrprods();
-    double get_price(const int index);
-    int get_nr_items(const int index);
+    int get_nrprods();
+    double get_price(int index);
+    int get_nr_items(int index);
+    const std::shared_ptr<electronic>& get_elec(int index);
 };
 
 #endif // ESHOP_H

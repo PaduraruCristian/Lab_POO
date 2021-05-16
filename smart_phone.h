@@ -9,11 +9,11 @@ protected:
     /// if more than threshold phones are sold -> discount
     const int threshold = INT_MAX;
 public:
-    smart_phone(const std::string& n, const std::string& desc, const double p, int tre=0);
-    virtual ~smart_phone();
+    smart_phone(const std::string& nume, const std::string& desc, double pret, int tre=0);
+    ~smart_phone() override;
 
     void present_product(std::ostream& c) override;
-    double gen_bonus_income(const int nr_hours) override;
+    double gen_bonus_income(int nr_hours) override;
 
 };
 

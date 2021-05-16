@@ -1,7 +1,7 @@
 #include "smart_phone.h"
 
 
-smart_phone::smart_phone(const std::string& n, const std::string& desc, const double p, int tre):electronic(n, desc, p), threshold(tre)
+smart_phone::smart_phone(const std::string& nume, const std::string& desc, const double pret, int tre):electronic(nume, desc, pret), threshold(tre)
 {
 
 }
@@ -19,7 +19,7 @@ void smart_phone::present_product(std::ostream& c)
 
 double smart_phone::gen_bonus_income(const int nr_hours)
 {
-    std::cout<<"Can't do much with a phone... still, you can play Candy Crush for "<<nr_hours<<" hours if you are that bored.\n";
+    ///std::cout<<"Can't do much with a phone... still, you can play Candy Crush for "<<nr_hours<<" hours if you are that bored.\n";
     return 0;
 }
 

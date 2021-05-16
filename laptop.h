@@ -9,8 +9,8 @@ protected:
 /// amount that it can generate per hour mining coins
     const double rate=0;
 public:
-    laptop(const std::string& n, const std::string& desc,  const double p, const double r);
-    ~laptop();
+    laptop(const std::string& nume, const std::string& desc, double pret, double rata);
+    ~laptop() override;
 
     void present_product(std::ostream& c) override;
     double gen_bonus_income(const int nr_hours) override;

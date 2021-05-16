@@ -1,6 +1,7 @@
 #include "product.h"
 
-product::product(const std::shared_ptr<electronic> &e, const double pr, const int n):price(pr), nr(n), el(e)
+
+product::product(std::shared_ptr<electronic> elec, const double price, const int nr):price(price), nr(nr), el(std::move(elec))
 {
 
 }
@@ -16,7 +17,7 @@ product::product(): price(0), nr(0), el(nullptr)
 
 product::~product()
 {
-    //dtor
+
 }
 
 product& product::operator=(const product& pr)
@@ -38,29 +39,29 @@ std::ostream& operator<<(std::ostream &c, const product& pr)
     return c;
 }
 
-double product::get_price()
+double product::get_price() const
 {
     return this->price;
 }
 
-int product::get_nr()
+int product::get_nr() const
 {
     return this->nr;
 }
 
-std::shared_ptr<electronic>& product::get_el()
+const std::shared_ptr<electronic>& product::get_el()
 {
     return this->el;
 }
 
-void product::update_nr(int x)
+void product::update_nr(int new_nr)
 {
-    this->nr = x;
+    this->nr = new_nr;
 }
 
 
-void product::update_price(double x)
+void product::update_price(double new_price)
 {
-    this->price = x;
+    this->price = new_price;
 }
 
