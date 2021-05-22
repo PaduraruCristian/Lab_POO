@@ -11,13 +11,7 @@
 #include "User_s.h"
 
 
-/// Un vector in care am pointeri la toate electronicele de pe piata
-/// In eshop, fiecare produs are o copie a unui astfel de pointer -> shared_ptr > unique_ptr;
-std::vector<std::shared_ptr<electronic>> all_electronics;
-std::vector<eshop> shops;
-
-
-void init(User_s* &user)
+void init(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electronics, std::vector<eshop>& shops)
 {
     std::ifstream f("set_up.in");
     ///user's initial balance
@@ -74,7 +68,7 @@ void init(User_s* &user)
     }
 }
 
-void menu(User_s* &user){
+void menu(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electronics, std::vector<eshop>& shops){
     int nr_shop=0, nr_prod=0, amount, option;
     while(true) {
         auto my_elec = shops.size() +1;
@@ -146,10 +140,16 @@ void menu(User_s* &user){
 
 int main()
 {
+
+    /// Un vector in care am pointeri la toate electronicele de pe piata
+    /// In eshop, fiecare produs are o copie a unui astfel de pointer
+    std::vector<std::shared_ptr<electronic>> all_electronics;
+    std::vector<eshop> shops;
+
     auto user = User_s::get_user();
     try{
-        init(user);
-        menu(user);
+        init(user, all_electronics, shops);
+        menu(user, all_electronics, shops);
     }
     catch(std::invalid_argument& s)
     {

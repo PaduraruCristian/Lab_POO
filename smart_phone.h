@@ -7,7 +7,7 @@ class smart_phone : public electronic
 {
 protected:
     /// if more than threshold phones are sold -> discount
-    const int threshold = INT_MAX;
+    const int threshold = 1<<30;
 public:
     smart_phone(const std::string& nume, const std::string& desc, double pret, int tre=0);
     ~smart_phone() override;
