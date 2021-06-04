@@ -70,17 +70,22 @@ void init(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electroni
 
 void menu(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electronics, std::vector<eshop>& shops){
     int nr_shop=0, nr_prod=0, amount, option;
+    long long int day_count = 1;
     while(true) {
         auto my_elec = shops.size() +1;
-        auto exit_opt = shops.size() + 2;
+        auto end_of_the_day = shops.size() + 2;
+        auto exit_opt = shops.size() + 3;
         if (!nr_shop) {
             rlutil::cls();
+            std::cout << "===========================================\n";
+            std::cout << "Day: "<<day_count<<'\n';
             std::cout << "===========================================\n";
             for (int i = 0; i < shops.size(); ++i) {
                 std::cout << i + 1 << "." << shops[i].get_name() << '\n';
             }
             std::cout << "===========================================\n";
             std::cout << my_elec<< ". My electronics\n";
+            std::cout << end_of_the_day<< ". End the day, get income from your electronics\n";
             std::cout << exit_opt << ". Exit\n";
             std::cin >> nr_shop;
         }
@@ -88,6 +93,17 @@ void menu(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electroni
         rlutil::cls();
         if(nr_shop == my_elec){
             user->print_owned_elecs(std::cout);
+            std::cout<<"1. Back\n";
+            std::cin>>nr_shop;
+            nr_shop=0;
+            continue;
+        }
+
+        if(nr_shop == end_of_the_day)
+        {
+            ++day_count;
+            user->gen_income();
+            std::cout<<"New balance: "<<user->get_balance()<<'\n';
             std::cout<<"1. Back\n";
             std::cin>>nr_shop;
             nr_shop=0;
@@ -140,9 +156,6 @@ void menu(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electroni
 
 int main()
 {
-
-    /// Un vector in care am pointeri la toate electronicele de pe piata
-    /// In eshop, fiecare produs are o copie a unui astfel de pointer
     std::vector<std::shared_ptr<electronic>> all_electronics;
     std::vector<eshop> shops;
 

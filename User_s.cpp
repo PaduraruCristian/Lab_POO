@@ -36,3 +36,10 @@ void User_s::print_owned_elecs(std::ostream& c) {
     for(auto& pr: myproducts)
         c<<pr.get_el()->get_name() << "\nYou own " <<pr.get_nr()<< " items of this type\n\n";
 }
+
+void User_s::gen_income() {
+    for(auto& prod: myproducts)
+    {
+        this->balance += prod.get_nr() * prod.get_el()->gen_bonus_income(12);
+    }
+}

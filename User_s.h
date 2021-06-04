@@ -23,6 +23,8 @@ public:
     double get_balance() const;
     void set_balance(double new_balance);
     void add_product(const std::shared_ptr<electronic>& elec, int nr);
+    void gen_income();
+
 
     void print_owned_elecs(std::ostream& c);
 };
