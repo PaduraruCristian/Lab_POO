@@ -6,10 +6,9 @@
 
 #include "eshop.h"
 #include "laptop.h"
-#include "smart_phone.h"
-#include "rlutil.h"  /// nice license details :)))
+#include "rlutil.h"
 #include "User_s.h"
-
+#include "product_builder.h"
 
 void init(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electronics, std::vector<eshop>& shops)
 {
@@ -20,19 +19,21 @@ void init(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electroni
     user->set_balance(balance);
     std::string name, specs;
     double producer_price, r;
-    int tre;
     int nr_l, nr_sp;
+    std::shared_ptr<electronic> el;
     ///add all laptops
     f>>nr_l;
     for(;nr_l; --nr_l)
     {
-        //read the \n after nr_l and then read the actual name and override it
+        ///read the \n after nr_l and then read the actual name and override it
         std::getline(f, name);
 
         std::getline(f, name);
         std::getline(f, specs);
         f>>producer_price>>r;
-        all_electronics.emplace_back(std::make_shared<laptop>(name, specs, producer_price, r));
+
+        el = std::make_shared<laptop>(name, specs, producer_price, r);
+        all_electronics.emplace_back(el);
     }
     ///add all smart_phones
     f>>nr_sp;
@@ -42,12 +43,15 @@ void init(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electroni
 
         std::getline(f, name);
         std::getline(f, specs);
-        f>>producer_price>>tre;
-        all_electronics.emplace_back(std::make_shared<smart_phone>(name, specs, producer_price, tre));
+        f>>producer_price;
+
+        el = std::make_shared<smart_phone>(name, specs, producer_price);
+        all_electronics.emplace_back(el);
     }
     ///init every shop;
     int nr_products, nr_bucati, index, nr_shops;
     double tax;
+    product_builder pr_builder;
     std::string address;
     f>>nr_shops;
     for(int i=0; i<nr_shops; ++i)
@@ -62,7 +66,8 @@ void init(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electroni
         for(;nr_products; --nr_products)
         {
             f>>index>>nr_bucati;
-            shops[i].add_product(all_electronics[index-1], nr_bucati);
+            pr_builder.elec(all_electronics.at(index-1)).nr(nr_bucati).pret(all_electronics.at(index-1)->get_producer_price()*(1+tax));
+            shops[i].add_product(pr_builder.build());
             ///index expected to be from 1 to nr_products so I added a -1;
         }
     }
@@ -116,6 +121,10 @@ void menu(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electroni
 
         auto back_opt = eshop.get_nrprods() + 1;
         if (!nr_prod) {
+            std::cout << "===========================================\n";
+            std::cout << "Shop:" << eshop.get_name()<<'\n';
+            std::cout << "Address:" << eshop.get_address()<<'\n';
+            std::cout << "===========================================\n";
             eshop.list_products(std::cout);
             std::cout << back_opt << ". Back\n";
             std::cout << "Choose a product to see more details or buy:";
@@ -141,6 +150,7 @@ void menu(User_s* &user, std::vector<std::shared_ptr<electronic>>& all_electroni
                 std::cin >> amount;
                 if (amount > 0 && amount <= eshop.get_nr_items(nr_prod - 1) &&
                     amount * eshop.get_price(nr_prod - 1) <= user->get_balance()) {
+
                     user->set_balance(user->get_balance() - amount * eshop.get_price(nr_prod - 1));
                     user->add_product(eshop.get_elec(nr_prod - 1), amount);
                     eshop.sell(nr_prod - 1, amount);

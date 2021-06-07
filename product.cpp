@@ -6,19 +6,14 @@ product::product(std::shared_ptr<electronic> elec, const double price, const int
 
 }
 
-product::product(const product& pr): price(pr.price), nr(pr.nr), el(pr.el)
-{
+product::product(const product& pr)= default;
 
-}
 product::product(): price(0), nr(0), el(nullptr)
 {
 
 }
 
-product::~product()
-{
-
-}
+product::~product() = default;
 
 product& product::operator=(const product& pr)
 {
@@ -59,9 +54,4 @@ void product::update_nr(int new_nr)
     this->nr = new_nr;
 }
 
-
-void product::update_price(double new_price)
-{
-    this->price = new_price;
-}
 

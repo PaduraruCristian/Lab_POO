@@ -10,9 +10,9 @@ eshop::eshop(std::string  nume, std::string  adresa, const double taxa):name(std
 
 eshop::~eshop()= default;
 
-void eshop::add_product(const std::shared_ptr<electronic> &e, const int n)
+void eshop::add_product(const product& pr)
 {
-    products.emplace_back(e, e->get_producer_price() * (1 + tax), n);
+    products.emplace_back(pr);
 }
 
 void eshop::remove_product(int index)
@@ -33,6 +33,23 @@ void eshop::sell(int index, int nr_prod)
         if(nr>=nr_prod)
         {
             products.at(index).update_nr(nr - nr_prod);
+
+            /// Daca numarul de produse a ajuns la 0
+            if(products[index].get_nr() == 0)
+            {
+                auto smp = std::dynamic_pointer_cast<smart_phone>(products[index].get_el());
+                /// si produsul este un smartphone -> remove_product; no supply for this
+                if(smp)
+                {
+                    this->remove_product(index);
+                }
+                else
+                {
+                    /// este un laptop; supply in functie de nr de proudse vandute ultima data;
+                    this->supply(index,int((3*nr+1)/2) );
+                }
+            }
+
             return;
         }
         throw std::invalid_argument("Don't have enough products with index " + std::to_string(index) + " in stock.\n");
@@ -83,4 +100,8 @@ int eshop::get_nr_items(const int index)
 
 const std::shared_ptr<electronic> &eshop::get_elec(int index) {
     return products.at(index).get_el();
+}
+
+const std::string &eshop::get_address() {
+    return this->address;
 }

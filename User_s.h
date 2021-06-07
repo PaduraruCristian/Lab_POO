@@ -9,7 +9,7 @@
 
 class User_s {
 private:
-    double balance;
+    double balance=0;
     std::vector<product> myproducts;
 
     static  User_s* user;

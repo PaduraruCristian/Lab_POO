@@ -1,7 +1,7 @@
 #include "smart_phone.h"
 
 
-smart_phone::smart_phone(const std::string& nume, const std::string& desc, const double pret, int tre):electronic(nume, desc, pret), threshold(tre)
+smart_phone::smart_phone(const std::string& nume, const std::string& desc, const double pret):electronic(nume, desc, pret)
 {
 
 }

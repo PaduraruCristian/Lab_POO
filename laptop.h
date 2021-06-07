@@ -13,7 +13,7 @@ public:
     ~laptop() override;
 
     void present_product(std::ostream& c) override;
-    double gen_bonus_income(const int nr_hours) override;
+    double gen_bonus_income(int nr_hours) override;
 };
 
 #endif // LAPTOP_H

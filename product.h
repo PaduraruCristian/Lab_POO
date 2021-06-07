@@ -22,7 +22,8 @@ public:
     const std::shared_ptr<electronic>& get_el();
 
     void update_nr(int new_nr);
-    void update_price(double new_price);
+
+    friend class product_builder;
 };
 
 #endif // PRODUCT_H
